@@ -10,175 +10,106 @@ import { Check, Copy } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const LuckyWheel = () => {
-    const [items, setItems] = useState(["1", "2", "3", "4", "5", "6"]);
-    const [results, setResults] = useState([]);
-    const [isSpinning, setIsSpinning] = useState(false);
-    const [rotation, setRotation] = useState(0);
-    const [wheelImage, setWheelImage] = useState("");
-    const [itemsText, setItemsText] = useState(items.join("\n"));
-    const [currentResult, setCurrentResult] = useState(null);
-    const [notification, setNotification] = useState(null);
-    const canvasRef = useRef(null);
-    const notificationTimeoutRef = useRef(null);
-    const wheelRadius = 150;
-    const wheelDiameter = wheelRadius * 2;
+    // 狀態管理
+    const [items, setItems] = useState(["1", "2", "3", "4", "5", "6"]); // 輪盤項目
+    const [results, setResults] = useState([]); // 抽獎結果
+    const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
+    const [rotation, setRotation] = useState(0); // 當前旋轉角度
+    const [wheelImage, setWheelImage] = useState(""); // 輪盤底圖
+    const [itemsText, setItemsText] = useState(items.join("\n")); // 項目文本
+    const [currentResult, setCurrentResult] = useState(null); // 當前結果
+    const [notification, setNotification] = useState(null); // 通知訊息
+    const canvasRef = useRef(null); // Canvas 引用
+    const notificationTimeoutRef = useRef(null); // 通知計時器引用
+    const wheelRadius = 150; // 輪盤半徑
+    const wheelDiameter = wheelRadius * 2; // 輪盤直徑
 
+    // 畫輪盤的效果
     useEffect(() => {
-        drawWheel();
-    }, [items, rotation, wheelImage]);
+        const drawWheel = () => {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d");
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
 
-    useEffect(() => {
-        setItemsText(items.join("\n"));
-    }, [items]);
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空畫布
 
-    useEffect(() => {
-        return () => {
-            if (notificationTimeoutRef.current) {
-                clearTimeout(notificationTimeoutRef.current);
-            }
-        };
-    }, []);
-
-    const showNotification = (message) => {
-        setNotification(message);
-        if (notificationTimeoutRef.current) {
-            clearTimeout(notificationTimeoutRef.current);
-        }
-        notificationTimeoutRef.current = setTimeout(() => {
-            setNotification(null);
-        }, 2000);
-    };
-
-    const drawWheel = () => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (wheelImage) {
-            const img = new Image();
-            img.src = wheelImage;
-            img.onload = () => {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, wheelRadius, 0, 2 * Math.PI);
-                ctx.clip();
-                ctx.drawImage(
-                    img,
-                    centerX - wheelRadius,
-                    centerY - wheelRadius,
-                    wheelDiameter,
-                    wheelDiameter
-                );
-                ctx.restore();
-                drawWheelSegments();
-            };
-        } else {
-            drawWheelSegments();
-        }
-
-        function drawWheelSegments() {
-            const segmentAngle = (2 * Math.PI) / items.length;
-
-            items.forEach((item, index) => {
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(
-                    centerX,
-                    centerY,
-                    wheelRadius,
-                    index * segmentAngle + rotation,
-                    (index + 1) * segmentAngle + rotation
-                );
-                ctx.closePath();
-
-                if (!wheelImage) {
-                    ctx.fillStyle = index % 2 === 0 ? "#FFD700" : "#FFA500";
-                    ctx.fill();
-                }
-                ctx.strokeStyle = "#E5E7EB"; // 淡灰色線條
-                ctx.lineWidth = 1;
-                ctx.stroke();
-
-                ctx.translate(centerX, centerY);
-                ctx.rotate(index * segmentAngle + segmentAngle / 2 + rotation);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#000";
-                ctx.font = "14px Arial";
-                ctx.fillText(item, wheelRadius - 10, 5);
-                ctx.restore();
-            });
-
-            // 指針
-            ctx.beginPath();
-            ctx.moveTo(centerX + wheelRadius + 10, centerY);
-            ctx.lineTo(centerX + wheelRadius + 30, centerY - 10);
-            ctx.lineTo(centerX + wheelRadius + 30, centerY + 10);
-            ctx.closePath();
-            ctx.fillStyle = "#FF0000";
-            ctx.fill();
-        }
-    };
-
-    const handleSpin = useCallback(() => {
-        if (isSpinning) return;
-
-        setIsSpinning(true);
-        setCurrentResult(null);
-        const spinDuration = 3000;
-        const startRotation = rotation;
-        const extraSpins = 5;
-        const randomAngle = Math.random() * (2 * Math.PI);
-        const targetRotation =
-            startRotation + 2 * Math.PI * extraSpins + randomAngle;
-
-        const startTime = Date.now();
-
-        const animate = () => {
-            const currentTime = Date.now();
-            const elapsed = currentTime - startTime;
-
-            if (elapsed < spinDuration) {
-                const progress = 1 - Math.pow(1 - elapsed / spinDuration, 3);
-                setRotation(
-                    startRotation + (targetRotation - startRotation) * progress
-                );
-                requestAnimationFrame(animate);
+            // 如果有底圖，則畫底圖
+            if (wheelImage) {
+                const img = new Image();
+                img.src = wheelImage;
+                img.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, wheelRadius, 0, 2 * Math.PI);
+                    ctx.clip();
+                    ctx.drawImage(
+                        img,
+                        centerX - wheelRadius,
+                        centerY - wheelRadius,
+                        wheelDiameter,
+                        wheelDiameter
+                    );
+                    ctx.restore();
+                    drawWheelSegments(); // 畫輪盤分段
+                };
             } else {
-                setRotation(targetRotation);
-                setIsSpinning(false);
+                drawWheelSegments(); // 畫輪盤分段
+            }
 
-                const normalizedRotation = targetRotation % (2 * Math.PI);
+            // 畫輪盤的分段
+            function drawWheelSegments() {
                 const segmentAngle = (2 * Math.PI) / items.length;
-                const winningIndex =
-                    items.length -
-                    1 -
-                    Math.floor(normalizedRotation / segmentAngle);
-                const winner = items[winningIndex % items.length];
 
-                const timestamp = new Date().toLocaleString();
-                const newResult = { item: winner, time: timestamp };
-                setResults((prev) => [...prev, newResult]);
-                setCurrentResult(newResult);
+                items.forEach((item, index) => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(
+                        centerX,
+                        centerY,
+                        wheelRadius,
+                        index * segmentAngle + rotation,
+                        (index + 1) * segmentAngle + rotation
+                    );
+                    ctx.closePath();
+
+                    // 設定顏色
+                    if (!wheelImage) {
+                        ctx.fillStyle = index % 2 === 0 ? "#FFD700" : "#FFA500";
+                        ctx.fill();
+                    }
+                    ctx.strokeStyle = "#E5E7EB"; // 淡灰色線條
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    // 畫文字
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(
+                        index * segmentAngle + segmentAngle / 2 + rotation
+                    );
+                    ctx.textAlign = "right";
+                    ctx.fillStyle = "#000";
+                    ctx.font = "14px Arial";
+                    ctx.fillText(item, wheelRadius - 10, 5);
+                    ctx.restore();
+                });
+
+                // 畫指針
+                ctx.beginPath();
+                ctx.moveTo(centerX + wheelRadius + 10, centerY);
+                ctx.lineTo(centerX + wheelRadius + 30, centerY - 10);
+                ctx.lineTo(centerX + wheelRadius + 30, centerY + 10);
+                ctx.closePath();
+                ctx.fillStyle = "#FF0000";
+                ctx.fill();
             }
         };
 
-        requestAnimationFrame(animate);
-    }, [isSpinning, rotation]);
+        drawWheel(); // 畫輪盤
+    }, [items, rotation, wheelImage, wheelDiameter]);
 
-    const handleUpdateItems = useCallback(() => {
-        if (itemsText.trim()) {
-            const newItems = itemsText
-                .split("\n")
-                .map((item) => item.trim())
-                .filter((item) => item.length > 0);
-            setItems(newItems);
-        }
-    }, [itemsText]);
-
+    // 處理圖片上傳
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -211,6 +142,91 @@ const LuckyWheel = () => {
         }
     };
 
+    // 更新項目文本
+    useEffect(() => {
+        setItemsText(items.join("\n"));
+    }, [items]);
+
+    // 更新項目
+    const handleUpdateItems = useCallback(() => {
+        if (itemsText.trim()) {
+            const newItems = itemsText
+                .split("\n")
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
+            setItems(newItems);
+        }
+    }, [itemsText]);
+
+    // 處理旋轉
+    const handleSpin = useCallback(() => {
+        if (isSpinning) return;
+
+        setIsSpinning(true);
+        setCurrentResult(null);
+        const spinDuration = 3000; // 旋轉持續時間
+        const startRotation = rotation; // 起始旋轉角度
+        const extraSpins = 5; // 額外旋轉次數
+        const randomAngle = Math.random() * (2 * Math.PI); // 隨機角度
+        const targetRotation =
+            startRotation + 2 * Math.PI * extraSpins + randomAngle; // 目標旋轉角度
+
+        const startTime = Date.now();
+
+        const animate = () => {
+            const currentTime = Date.now();
+            const elapsed = currentTime - startTime;
+
+            if (elapsed < spinDuration) {
+                const progress = 1 - Math.pow(1 - elapsed / spinDuration, 3);
+                setRotation(
+                    startRotation + (targetRotation - startRotation) * progress
+                );
+                requestAnimationFrame(animate);
+            } else {
+                setRotation(targetRotation);
+                setIsSpinning(false);
+
+                // 計算獲勝項目
+                const normalizedRotation = targetRotation % (2 * Math.PI);
+                const segmentAngle = (2 * Math.PI) / items.length;
+                const winningIndex =
+                    items.length -
+                    1 -
+                    Math.floor(normalizedRotation / segmentAngle);
+                const winner = items[winningIndex % items.length];
+
+                const timestamp = new Date().toLocaleString();
+                const newResult = { item: winner, time: timestamp };
+                setResults((prev) => [...prev, newResult]);
+                setCurrentResult(newResult);
+            }
+        };
+
+        requestAnimationFrame(animate);
+    }, [isSpinning, rotation, items]);
+
+    // 清除通知計時器
+    useEffect(() => {
+        return () => {
+            if (notificationTimeoutRef.current) {
+                clearTimeout(notificationTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    // 顯示通知
+    const showNotification = (message) => {
+        setNotification(message);
+        if (notificationTimeoutRef.current) {
+            clearTimeout(notificationTimeoutRef.current);
+        }
+        notificationTimeoutRef.current = setTimeout(() => {
+            setNotification(null);
+        }, 2000);
+    };
+
+    // 複製單一結果
     const handleCopyResult = (result) => {
         const textToCopy = `${result.time}: ${result.item}`;
         navigator.clipboard.writeText(textToCopy).then(() => {
@@ -218,6 +234,7 @@ const LuckyWheel = () => {
         });
     };
 
+    // 複製所有結果
     const handleCopyAllResults = () => {
         const textToCopy = results
             .map((result) => `${result.time}: ${result.item}`)
