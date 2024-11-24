@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Check, Copy } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const LuckyWheel = () => {
+export const LuckyWheel = () => {
     // 狀態管理
     const [items, setItems] = useState(["1", "2", "3", "4", "5", "6"]); // 輪盤項目
     const [results, setResults] = useState([]); // 抽獎結果
@@ -247,8 +248,9 @@ const LuckyWheel = () => {
     return (
         <div className="flex flex-col space-y-4 p-4">
             <Card className="w-full max-w-2xl mx-auto">
-                <CardHeader>
-                    <CardTitle>幸運輪盤</CardTitle>
+                <CardHeader className="flex-row justify-between items-center py-3">
+                    <CardTitle className="text-lg">幸運輪盤</CardTitle>
+                    <ThemeToggleButton />
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {currentResult && (
@@ -349,5 +351,3 @@ const LuckyWheel = () => {
         </div>
     );
 };
-
-export default LuckyWheel;
