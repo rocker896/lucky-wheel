@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export const LuckyWheelControls = ({
     items,
@@ -51,21 +51,15 @@ export const LuckyWheelControls = ({
         }
     };
 
-    // 更新項目文本
-    useEffect(() => {
-        setItemsText(items.join("\n"));
-    }, [items]);
-
-    // 更新項目
-    const handleUpdateItems = useCallback(() => {
-        if (itemsText.trim()) {
-            const newItems = itemsText
-                .split("\n")
-                .map((item) => item.trim())
-                .filter((item) => item.length > 0);
-            setItems(newItems);
-        }
-    }, [itemsText, setItems]);
+    const handleItemsChange = (e) => {
+        const newItemsText = e.target.value;
+        setItemsText(newItemsText);
+        const newItems = newItemsText
+            .split("\n")
+            .map((item) => item.trim())
+            .filter((item) => item.length > 0);
+        setItems(newItems);
+    };
 
     // 處理旋轉
     const handleSpin = useCallback(() => {
@@ -139,12 +133,11 @@ export const LuckyWheelControls = ({
                 <Textarea
                     id="items"
                     value={itemsText}
-                    onChange={(e) => setItemsText(e.target.value)}
+                    onChange={handleItemsChange}
                     placeholder="輸入項目，每行一個"
                     rows={4}
                     className="w-full"
                 />
-                <Button onClick={handleUpdateItems}>更新項目</Button>
             </div>
 
             <Button
