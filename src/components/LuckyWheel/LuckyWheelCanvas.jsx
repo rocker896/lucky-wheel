@@ -69,6 +69,10 @@ export const LuckyWheelCanvas = ({
                     ctx.lineWidth = 1;
                     ctx.stroke();
 
+                    // 計算文字大小
+                    const maxFontSize = wheelRadius / (item.length * 0.8); // 根據文字長度計算文字大小
+                    const fontSize = Math.min(maxFontSize, 25); // 設定最大字體大小為 25
+
                     // 畫文字
                     ctx.translate(centerX, centerY);
                     ctx.rotate(
@@ -76,8 +80,8 @@ export const LuckyWheelCanvas = ({
                     );
                     ctx.textAlign = "right";
                     ctx.fillStyle = "#000";
-                    ctx.font = "14px Arial";
-                    ctx.fillText(item, wheelRadius - 10, 5);
+                    ctx.font = `${fontSize}px Arial`;
+                    ctx.fillText(item, wheelRadius - 15, 5);
                     ctx.restore();
                 });
 
