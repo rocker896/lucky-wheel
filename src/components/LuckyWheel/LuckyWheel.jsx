@@ -9,10 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 
 export const LuckyWheel = () => {
-    // 狀態管理
-    const [items, setItems] = useState(["1", "2", "3", "4", "5", "6"]); // 輪盤預設項目
+    const defaultWheelItems = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_ITEMS; // 預設輪盤項目
+    const [items, setItems] = useState(
+        defaultWheelItems
+            ? defaultWheelItems.split(",")
+            : ["1", "2", "3", "4", "5", "6"]
+    );
+
+    const defaultWheelImagePath =
+        process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH; // 預設輪盤底圖路徑
+    const [wheelImage, setWheelImage] = useState(
+        defaultWheelImagePath ? defaultWheelImagePath : ""
+    );
+
     const [rotation, setRotation] = useState(0); // 當前旋轉角度
-    const [wheelImage, setWheelImage] = useState(""); // 輪盤底圖
     const [results, setResults] = useState([]); // 抽獎結果
     const [currentResult, setCurrentResult] = useState(null); // 當前結果
     const wheelRadius = 275; // 輪盤半徑
