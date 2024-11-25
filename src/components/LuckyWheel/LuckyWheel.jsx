@@ -15,7 +15,7 @@ export const LuckyWheel = () => {
     const [wheelImage, setWheelImage] = useState(""); // 輪盤底圖
     const [results, setResults] = useState([]); // 抽獎結果
     const [currentResult, setCurrentResult] = useState(null); // 當前結果
-    const wheelRadius = 150; // 輪盤半徑
+    const wheelRadius = 275; // 輪盤半徑
     const wheelDiameter = wheelRadius * 2; // 輪盤直徑
 
     return (
