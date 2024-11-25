@@ -30,6 +30,7 @@ export const LuckyWheelControls = ({
                     tempCanvas.width = wheelDiameter;
                     tempCanvas.height = wheelDiameter;
                     const tempCtx = tempCanvas.getContext("2d");
+                    tempCtx.globalAlpha = 0.5; // 設定不透明度為 0.5
 
                     // 計算裁剪參數以保持圖片比例並填滿圓形區域
                     const scale = Math.max(

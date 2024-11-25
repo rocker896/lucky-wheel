@@ -28,6 +28,7 @@ export const LuckyWheelCanvas = ({
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, wheelRadius, 0, 2 * Math.PI);
                     ctx.clip();
+                    ctx.globalAlpha = 0.5; // 設定不透明度為 0.5
                     ctx.drawImage(
                         img,
                         centerX - wheelRadius,
