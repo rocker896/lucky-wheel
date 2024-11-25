@@ -1,4 +1,4 @@
-import { LuckyWheel } from "@/components/LuckyWheel";
+import { LuckyWheel } from "@/components/LuckyWheel/LuckyWheel";
 
 export default function Home() {
     return (
