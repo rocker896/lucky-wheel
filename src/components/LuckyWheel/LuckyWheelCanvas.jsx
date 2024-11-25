@@ -83,9 +83,9 @@ export const LuckyWheelCanvas = ({
 
                 // 畫指針
                 ctx.beginPath();
-                ctx.moveTo(centerX + wheelRadius + 10, centerY);
-                ctx.lineTo(centerX + wheelRadius + 30, centerY - 10);
-                ctx.lineTo(centerX + wheelRadius + 30, centerY + 10);
+                ctx.moveTo(centerX + wheelRadius - 20, centerY);
+                ctx.lineTo(centerX + wheelRadius, centerY - 10);
+                ctx.lineTo(centerX + wheelRadius, centerY + 10);
                 ctx.closePath();
                 ctx.fillStyle = "#FF0000";
                 ctx.fill();
