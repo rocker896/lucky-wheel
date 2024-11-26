@@ -15,11 +15,9 @@ export const LuckyWheel = () => {
         : ["1", "2", "3", "4", "5", "6"]; // 預設輪盤項目
     const [items, setItems] = useState(defaultWheelItems);
 
-    const defaultWheelImagePath =
-        process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH; // 預設輪盤底圖路徑
-    const [wheelImage, setWheelImage] = useState(
-        defaultWheelImagePath ? defaultWheelImagePath : ""
-    );
+    const envWheelImagePath = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH;
+    const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : ""; // 預設輪盤底圖路徑
+    const [wheelImage, setWheelImage] = useState(defaultWheelImagePath);
 
     const [rotation, setRotation] = useState(0); // 當前旋轉角度
     const [results, setResults] = useState([]); // 抽獎結果
@@ -52,6 +50,7 @@ export const LuckyWheel = () => {
                         rotation={rotation}
                         wheelDiameter={wheelDiameter}
                         defaultWheelItems={defaultWheelItems}
+                        defaultWheelImagePath={defaultWheelImagePath}
                         setItems={setItems}
                         setResults={setResults}
                         setRotation={setRotation}

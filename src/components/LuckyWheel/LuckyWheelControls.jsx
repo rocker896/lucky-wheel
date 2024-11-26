@@ -9,6 +9,7 @@ export const LuckyWheelControls = ({
     rotation,
     wheelDiameter,
     defaultWheelItems,
+    defaultWheelImagePath,
     setItems,
     setResults,
     setRotation,
@@ -50,6 +51,16 @@ export const LuckyWheelControls = ({
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    // 處理底圖重設
+    const handleResetImage = () => {
+        setWheelImage(defaultWheelImagePath);
+    };
+
+    // 處理底圖清除
+    const handleClearImage = () => {
+        setWheelImage(null);
     };
 
     // 處理項目更新
@@ -137,6 +148,22 @@ export const LuckyWheelControls = ({
                     accept="image/*"
                     onChange={handleImageUpload}
                 />
+                <div className="isolate flex -space-x-px">
+                    <Button
+                        onClick={handleResetImage}
+                        variant="outline"
+                        className="w-full rounded-r-none focus:z-10"
+                    >
+                        重設
+                    </Button>
+                    <Button
+                        onClick={handleClearImage}
+                        variant="outline"
+                        className="w-full rounded-l-none focus:z-10"
+                    >
+                        清除
+                    </Button>
+                </div>
             </div>
 
             <div className="space-y-2">
