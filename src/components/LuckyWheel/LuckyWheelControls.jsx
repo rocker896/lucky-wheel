@@ -52,13 +52,6 @@ export const LuckyWheelControls = ({
         }
     };
 
-    // 處理項目重設
-    const handleResetToDefaultItems = () => {
-        setItems(defaultWheelItems);
-        setItemsText(defaultWheelItems.join("\n"));
-        setRotation(0); // 重置旋轉角度
-    };
-
     // 處理項目更新
     const handleItemsChange = (e) => {
         const newItemsText = e.target.value;
@@ -70,7 +63,14 @@ export const LuckyWheelControls = ({
         setItems(newItems);
     };
 
-    // 處理旋轉
+    // 處理項目重設
+    const handleResetToDefaultItems = () => {
+        setItems(defaultWheelItems);
+        setItemsText(defaultWheelItems.join("\n"));
+        setRotation(0); // 重置旋轉角度
+    };
+
+    // 處理抽獎
     const handleSpin = useCallback(() => {
         if (isSpinning) return;
 
@@ -140,12 +140,9 @@ export const LuckyWheelControls = ({
             </div>
 
             <div className="space-y-2">
-                <div className="flex flex-row justify-between items-center">
-                    <Label htmlFor="items" className="text-base font-semibold">
-                        輪盤項目
-                    </Label>
-                    <Button onClick={handleResetToDefaultItems}>重設</Button>
-                </div>
+                <Label htmlFor="items" className="text-base font-semibold">
+                    輪盤項目
+                </Label>
                 <Textarea
                     id="items"
                     value={itemsText}
@@ -154,6 +151,9 @@ export const LuckyWheelControls = ({
                     rows={5}
                     className="w-full"
                 />
+                <Button onClick={handleResetToDefaultItems} className="w-full">
+                    重設
+                </Button>
             </div>
 
             <Button
