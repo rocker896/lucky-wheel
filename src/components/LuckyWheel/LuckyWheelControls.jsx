@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export const LuckyWheelControls = ({
     items,
@@ -18,6 +18,7 @@ export const LuckyWheelControls = ({
 }) => {
     const [itemsText, setItemsText] = useState(items.join("\n")); // 項目文本
     const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
+    const fileInputRef = useRef(null); // 新增 ref 來操作檔案輸入框
 
     // 處理圖片上傳
     const handleImageUpload = (e) => {
@@ -53,14 +54,10 @@ export const LuckyWheelControls = ({
         }
     };
 
-    // 處理底圖重設
-    const handleResetImage = () => {
-        setWheelImage(defaultWheelImagePath);
-    };
-
-    // 處理底圖清除
-    const handleClearImage = () => {
-        setWheelImage(null);
+    // 處理底圖重設或清除
+    const handleResetImage = (wheelImagePath) => {
+        setWheelImage(wheelImagePath);
+        fileInputRef.current.value = ""; // 清除檔案輸入框的值
     };
 
     // 處理項目更新
@@ -147,17 +144,18 @@ export const LuckyWheelControls = ({
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
+                    ref={fileInputRef}
                 />
                 <div className="isolate flex -space-x-px">
                     <Button
-                        onClick={handleResetImage}
+                        onClick={() => handleResetImage(defaultWheelImagePath)}
                         variant="outline"
                         className="w-full rounded-r-none focus:z-10"
                     >
                         重設
                     </Button>
                     <Button
-                        onClick={handleClearImage}
+                        onClick={() => handleResetImage(null)}
                         variant="outline"
                         className="w-full rounded-l-none focus:z-10"
                     >
