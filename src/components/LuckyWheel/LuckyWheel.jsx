@@ -9,12 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 
 export const LuckyWheel = () => {
-    const defaultWheelItems = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_ITEMS; // 預設輪盤項目
-    const [items, setItems] = useState(
-        defaultWheelItems
-            ? defaultWheelItems.split(",")
-            : ["1", "2", "3", "4", "5", "6"]
-    );
+    const envWheelItems = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_ITEMS;
+    const defaultWheelItems = envWheelItems
+        ? envWheelItems.split(",")
+        : ["1", "2", "3", "4", "5", "6"]; // 預設輪盤項目
+    const [items, setItems] = useState(defaultWheelItems);
 
     const defaultWheelImagePath =
         process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH; // 預設輪盤底圖路徑
@@ -51,6 +50,7 @@ export const LuckyWheel = () => {
                         items={items}
                         rotation={rotation}
                         wheelDiameter={wheelDiameter}
+                        defaultWheelItems={defaultWheelItems}
                         setItems={setItems}
                         setResults={setResults}
                         setRotation={setRotation}

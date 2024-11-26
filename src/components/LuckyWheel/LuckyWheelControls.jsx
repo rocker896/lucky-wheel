@@ -8,6 +8,7 @@ export const LuckyWheelControls = ({
     items,
     rotation,
     wheelDiameter,
+    defaultWheelItems,
     setItems,
     setResults,
     setRotation,
@@ -51,6 +52,14 @@ export const LuckyWheelControls = ({
         }
     };
 
+    // 處理項目重設
+    const handleResetToDefaultItems = () => {
+        setItems(defaultWheelItems);
+        setItemsText(defaultWheelItems.join("\n"));
+        setRotation(0); // 重置旋轉角度
+    };
+
+    // 處理項目更新
     const handleItemsChange = (e) => {
         const newItemsText = e.target.value;
         setItemsText(newItemsText);
@@ -129,13 +138,16 @@ export const LuckyWheelControls = ({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="items">編輯項目（每行一個）</Label>
+                <div className="flex flex-row justify-between items-center">
+                    <Label htmlFor="items">編輯項目</Label>
+                    <Button onClick={handleResetToDefaultItems}>重設</Button>
+                </div>
                 <Textarea
                     id="items"
                     value={itemsText}
                     onChange={handleItemsChange}
-                    placeholder="輸入項目，每行一個"
-                    rows={4}
+                    placeholder="輸入項目"
+                    rows={5}
                     className="w-full"
                 />
             </div>
