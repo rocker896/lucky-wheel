@@ -5,18 +5,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useRef, useState } from "react";
 
 export const LuckyWheelControls = ({
-    items,
     rotation,
+    wheelItems,
     wheelDiameter,
     defaultWheelItems,
     defaultWheelImagePath,
-    setItems,
     setResults,
     setRotation,
-    setWheelImage,
+    setWheelItems,
+    setWheelImagePath,
     setCurrentResult,
 }) => {
-    const [itemsText, setItemsText] = useState(items.join("\n")); // 項目文本
+    const [itemsText, setItemsText] = useState(wheelItems.join("\n")); // 項目文本
     const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
     const fileInputRef = useRef(null); // 新增 ref 來操作檔案輸入框
 
@@ -46,7 +46,7 @@ export const LuckyWheelControls = ({
                     const y = (wheelDiameter - scaledHeight) / 2;
 
                     tempCtx.drawImage(img, x, y, scaledWidth, scaledHeight);
-                    setWheelImage(tempCanvas.toDataURL());
+                    setWheelImagePath(tempCanvas.toDataURL());
                 };
                 img.src = e.target.result;
             };
@@ -56,7 +56,7 @@ export const LuckyWheelControls = ({
 
     // 處理底圖重設或清除
     const handleResetImage = (wheelImagePath) => {
-        setWheelImage(wheelImagePath);
+        setWheelImagePath(wheelImagePath);
         fileInputRef.current.value = ""; // 清除檔案輸入框的值
     };
 
@@ -68,12 +68,12 @@ export const LuckyWheelControls = ({
             .split("\n")
             .map((item) => item.trim())
             .filter((item) => item.length > 0);
-        setItems(newItems);
+        setWheelItems(newItems);
     };
 
     // 處理項目重設
     const handleResetToDefaultItems = () => {
-        setItems(defaultWheelItems);
+        setWheelItems(defaultWheelItems);
         setItemsText(defaultWheelItems.join("\n"));
         setRotation(0); // 重置旋轉角度
     };
@@ -109,12 +109,12 @@ export const LuckyWheelControls = ({
 
                 // 計算獲勝項目
                 const normalizedRotation = targetRotation % (2 * Math.PI);
-                const segmentAngle = (2 * Math.PI) / items.length;
+                const segmentAngle = (2 * Math.PI) / wheelItems.length;
                 const winningIndex =
-                    items.length -
+                    wheelItems.length -
                     1 -
                     Math.floor(normalizedRotation / segmentAngle);
-                const winner = items[winningIndex % items.length];
+                const winner = wheelItems[winningIndex % wheelItems.length];
 
                 const timestamp = new Date().toLocaleString();
                 const newResult = { item: winner, time: timestamp };
@@ -126,8 +126,8 @@ export const LuckyWheelControls = ({
         requestAnimationFrame(animate);
     }, [
         isSpinning,
-        items,
         rotation,
+        wheelItems,
         setResults,
         setRotation,
         setCurrentResult,
@@ -136,11 +136,11 @@ export const LuckyWheelControls = ({
     return (
         <>
             <div className="space-y-2">
-                <Label htmlFor="background" className="text-base font-semibold">
+                <Label htmlFor="wheelImage" className="text-base font-semibold">
                     輪盤底圖
                 </Label>
                 <Input
-                    id="background"
+                    id="wheelImage"
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
@@ -165,11 +165,11 @@ export const LuckyWheelControls = ({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="items" className="text-base font-semibold">
+                <Label htmlFor="wheelItems" className="text-base font-semibold">
                     輪盤項目
                 </Label>
                 <Textarea
-                    id="items"
+                    id="wheelItems"
                     value={itemsText}
                     onChange={handleItemsChange}
                     placeholder="輸入項目"

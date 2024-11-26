@@ -13,11 +13,11 @@ export const LuckyWheel = () => {
     const defaultWheelItems = envWheelItems
         ? envWheelItems.split(",")
         : ["1", "2", "3", "4", "5", "6"]; // 預設輪盤項目
-    const [items, setItems] = useState(defaultWheelItems);
+    const [wheelItems, setWheelItems] = useState(defaultWheelItems);
 
     const envWheelImagePath = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH;
     const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : ""; // 預設輪盤底圖路徑
-    const [wheelImage, setWheelImage] = useState(defaultWheelImagePath);
+    const [wheelImagePath, setWheelImagePath] = useState(defaultWheelImagePath);
 
     const [rotation, setRotation] = useState(0); // 當前旋轉角度
     const [results, setResults] = useState([]); // 抽獎結果
@@ -38,23 +38,23 @@ export const LuckyWheel = () => {
                     <LuckyWheelResultAlert currentResult={currentResult} />
 
                     <LuckyWheelCanvas
-                        items={items}
                         rotation={rotation}
-                        wheelImage={wheelImage}
+                        wheelItems={wheelItems}
+                        wheelImagePath={wheelImagePath}
                         wheelRadius={wheelRadius}
                         wheelDiameter={wheelDiameter}
                     />
 
                     <LuckyWheelControls
-                        items={items}
                         rotation={rotation}
+                        wheelItems={wheelItems}
                         wheelDiameter={wheelDiameter}
                         defaultWheelItems={defaultWheelItems}
                         defaultWheelImagePath={defaultWheelImagePath}
-                        setItems={setItems}
                         setResults={setResults}
                         setRotation={setRotation}
-                        setWheelImage={setWheelImage}
+                        setWheelItems={setWheelItems}
+                        setWheelImagePath={setWheelImagePath}
                         setCurrentResult={setCurrentResult}
                     />
 

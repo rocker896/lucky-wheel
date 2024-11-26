@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 export const LuckyWheelCanvas = ({
-    items,
     rotation,
-    wheelImage,
+    wheelItems,
+    wheelImagePath,
     wheelRadius,
     wheelDiameter,
 }) => {
@@ -20,9 +20,9 @@ export const LuckyWheelCanvas = ({
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空畫布
 
             // 如果有底圖，則畫底圖
-            if (wheelImage) {
+            if (wheelImagePath) {
                 const img = new Image();
-                img.src = wheelImage;
+                img.src = wheelImagePath;
                 img.onload = () => {
                     ctx.save();
                     ctx.beginPath();
@@ -45,9 +45,9 @@ export const LuckyWheelCanvas = ({
 
             // 畫輪盤的分段
             function drawWheelSegments() {
-                const segmentAngle = (2 * Math.PI) / items.length;
+                const segmentAngle = (2 * Math.PI) / wheelItems.length;
 
-                items.forEach((item, index) => {
+                wheelItems.forEach((wheelItem, index) => {
                     ctx.save();
                     ctx.beginPath();
                     ctx.moveTo(centerX, centerY);
@@ -61,7 +61,7 @@ export const LuckyWheelCanvas = ({
                     ctx.closePath();
 
                     // 設定顏色
-                    if (!wheelImage) {
+                    if (!wheelImagePath) {
                         ctx.fillStyle = index % 2 === 0 ? "#FFD700" : "#FFA500";
                         ctx.fill();
                     }
@@ -70,7 +70,7 @@ export const LuckyWheelCanvas = ({
                     ctx.stroke();
 
                     // 計算文字大小
-                    const maxFontSize = wheelRadius / (item.length * 0.8); // 根據文字長度計算文字大小
+                    const maxFontSize = wheelRadius / (wheelItem.length * 0.8); // 根據文字長度計算文字大小
                     const fontSize = Math.min(maxFontSize, 25); // 設定最大字體大小為 25
 
                     // 畫文字
@@ -81,7 +81,7 @@ export const LuckyWheelCanvas = ({
                     ctx.textAlign = "right";
                     ctx.fillStyle = "#000";
                     ctx.font = `${fontSize}px Arial`;
-                    ctx.fillText(item, wheelRadius - 15, 5);
+                    ctx.fillText(wheelItem, wheelRadius - 15, 5);
                     ctx.restore();
                 });
 
@@ -97,7 +97,7 @@ export const LuckyWheelCanvas = ({
         };
 
         drawWheel();
-    }, [items, rotation, wheelImage, wheelRadius, wheelDiameter]);
+    }, [rotation, wheelItems, wheelImagePath, wheelRadius, wheelDiameter]);
 
     return (
         <div className="flex justify-center">
