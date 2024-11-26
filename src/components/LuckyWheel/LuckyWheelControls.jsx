@@ -128,7 +128,9 @@ export const LuckyWheelControls = ({
     return (
         <>
             <div className="space-y-2">
-                <Label htmlFor="background">更換輪盤底圖</Label>
+                <Label htmlFor="background" className="text-base font-semibold">
+                    輪盤底圖
+                </Label>
                 <Input
                     id="background"
                     type="file"
@@ -139,7 +141,9 @@ export const LuckyWheelControls = ({
 
             <div className="space-y-2">
                 <div className="flex flex-row justify-between items-center">
-                    <Label htmlFor="items">編輯項目</Label>
+                    <Label htmlFor="items" className="text-base font-semibold">
+                        輪盤項目
+                    </Label>
                     <Button onClick={handleResetToDefaultItems}>重設</Button>
                 </div>
                 <Textarea
@@ -157,7 +161,7 @@ export const LuckyWheelControls = ({
                 disabled={isSpinning}
                 className="w-full"
             >
-                {isSpinning ? "旋轉中..." : "開始旋轉"}
+                {isSpinning ? "抽獎中..." : "開始抽獎"}
             </Button>
         </>
     );

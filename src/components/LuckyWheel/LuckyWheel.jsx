@@ -32,6 +32,7 @@ export const LuckyWheel = () => {
             <Card className="w-full max-w-2xl mx-auto">
                 <CardHeader className="flex-row justify-between items-center py-3">
                     <CardTitle className="text-lg">幸運輪盤</CardTitle>
+
                     <ThemeToggleButton />
                 </CardHeader>
 
