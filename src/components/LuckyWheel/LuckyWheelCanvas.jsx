@@ -101,12 +101,7 @@ export const LuckyWheelCanvas = ({
 
     return (
         <div className="flex justify-center">
-            <canvas
-                ref={canvasRef}
-                width={600}
-                height={600}
-                className="border rounded"
-            />
+            <canvas ref={canvasRef} width={600} height={600} />
         </div>
     );
 };
