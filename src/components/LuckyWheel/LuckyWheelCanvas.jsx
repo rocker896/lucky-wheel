@@ -45,7 +45,16 @@ export const LuckyWheelCanvas = ({
 
             // 畫輪盤的分段
             function drawWheelSegments() {
-                const segmentAngle = (2 * Math.PI) / wheelItems.length;
+                const wheelItemsLength = wheelItems.length;
+                const segmentAngle = (2 * Math.PI) / wheelItemsLength;
+                const sectorColors = [
+                    "#FA8072", // 鮭魚粉
+                    "#FFD700", // 金黃色
+                    "#7FFFD4", // 碧綠色
+                    "#72DDF7", // 天藍色
+                    "#9370DB", // 紫色
+                ];
+                const sectorColorsLength = sectorColors.length;
 
                 wheelItems.forEach((wheelItem, index) => {
                     ctx.save();
@@ -62,12 +71,28 @@ export const LuckyWheelCanvas = ({
 
                     // 設定顏色
                     if (!wheelImagePath) {
-                        ctx.fillStyle = index % 2 === 0 ? "#FFD700" : "#FFA500";
+                        let colorIndex = index % sectorColorsLength;
+                        const sectorsPerColor = Math.floor(
+                            wheelItemsLength / sectorColorsLength
+                        );
+
+                        // 當扇形數量不是顏色數量的整數倍時的特殊處理
+                        // 參考 https://tw.piliapp.com/random/wheel/ 的渲染邏輯
+                        if (
+                            index >= sectorsPerColor * sectorColorsLength &&
+                            wheelItemsLength % sectorColorsLength > 0 &&
+                            wheelItemsLength % sectorColorsLength < 3
+                        ) {
+                            colorIndex += 2;
+                        }
+
+                        ctx.fillStyle = sectorColors[colorIndex];
                         ctx.fill();
+                    } else {
+                        ctx.strokeStyle = "#4C4C4C"; // 淡灰色線條
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
                     }
-                    ctx.strokeStyle = "#E5E7EB"; // 淡灰色線條
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
 
                     // 計算文字大小
                     const maxFontSize = wheelRadius / (wheelItem.length * 0.8); // 根據文字長度計算文字大小
