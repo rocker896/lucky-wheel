@@ -1,5 +1,6 @@
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -57,7 +58,7 @@ export const LuckyWheelResults = ({ results }) => {
             )}
 
             <div className="flex justify-between items-center mb-2">
-                <h3 className="text-base font-semibold">抽獎記錄</h3>
+                <Label className="text-base font-semibold">抽獎記錄</Label>
                 {results.length > 0 && (
                     <Button
                         variant="outline"

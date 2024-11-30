@@ -19,11 +19,16 @@ export const LuckyWheel = () => {
     const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : ""; // 預設輪盤底圖路徑
     const [wheelImagePath, setWheelImagePath] = useState(defaultWheelImagePath);
 
-    const [rotation, setRotation] = useState(0); // 當前旋轉角度
-    const [results, setResults] = useState([]); // 抽獎結果
-    const [currentResult, setCurrentResult] = useState(null); // 當前結果
+    const [visibleItems, setVisibleItems] = useState(
+        wheelItems.filter((item) => !new Set().has(item))
+    ); // 實際顯示項目
+
     const wheelRadius = 275; // 輪盤半徑
     const wheelDiameter = wheelRadius * 2; // 輪盤直徑
+    const [rotation, setRotation] = useState(0); // 當前旋轉角度
+
+    const [results, setResults] = useState([]); // 抽獎結果
+    const [currentResult, setCurrentResult] = useState(null); // 當前結果
 
     return (
         <div className="flex flex-col space-y-4 p-4">
@@ -39,7 +44,7 @@ export const LuckyWheel = () => {
 
                     <LuckyWheelCanvas
                         rotation={rotation}
-                        wheelItems={wheelItems}
+                        wheelItems={visibleItems}
                         wheelImagePath={wheelImagePath}
                         wheelRadius={wheelRadius}
                         wheelDiameter={wheelDiameter}
@@ -48,6 +53,7 @@ export const LuckyWheel = () => {
                     <LuckyWheelControls
                         rotation={rotation}
                         wheelItems={wheelItems}
+                        visibleItems={visibleItems}
                         wheelDiameter={wheelDiameter}
                         defaultWheelItems={defaultWheelItems}
                         defaultWheelImagePath={defaultWheelImagePath}
@@ -55,6 +61,7 @@ export const LuckyWheel = () => {
                         setRotation={setRotation}
                         setWheelItems={setWheelItems}
                         setWheelImagePath={setWheelImagePath}
+                        setVisibleItems={setVisibleItems}
                         setCurrentResult={setCurrentResult}
                     />
 

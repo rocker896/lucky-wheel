@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,7 @@ import { useCallback, useRef, useState } from "react";
 export const LuckyWheelControls = ({
     rotation,
     wheelItems,
+    visibleItems,
     wheelDiameter,
     defaultWheelItems,
     defaultWheelImagePath,
@@ -14,11 +16,16 @@ export const LuckyWheelControls = ({
     setRotation,
     setWheelItems,
     setWheelImagePath,
+    setVisibleItems,
     setCurrentResult,
 }) => {
-    const [itemsText, setItemsText] = useState(wheelItems.join("\n")); // 項目文本
-    const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
     const fileInputRef = useRef(null); // 新增 ref 來操作檔案輸入框
+    const [itemsText, setItemsText] = useState(wheelItems.join("\n")); // 項目文本
+
+    const [isEditingHidden, setIsEditingHidden] = useState(false); // 編輯隱藏狀態
+    const [hiddenItems, setHiddenItems] = useState(new Set()); // 隱藏項目
+
+    const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
 
     // 處理圖片上傳
     const handleImageUpload = (e) => {
@@ -61,21 +68,40 @@ export const LuckyWheelControls = ({
     };
 
     // 處理項目更新
-    const handleItemsChange = (e) => {
+    const handleItemsTextChange = (e) => {
         const newItemsText = e.target.value;
         setItemsText(newItemsText);
+
         const newItems = newItemsText
             .split("\n")
             .map((item) => item.trim())
             .filter((item) => item.length > 0);
+        setVisibleItems(newItems);
         setWheelItems(newItems);
     };
 
     // 處理項目重設
     const handleResetToDefaultItems = () => {
-        setWheelItems(defaultWheelItems);
         setItemsText(defaultWheelItems.join("\n"));
+        setWheelItems(defaultWheelItems);
         setRotation(0); // 重置旋轉角度
+    };
+
+    // 處理項目隱藏狀態切換
+    const handleHiddenItemToggle = (item) => {
+        const newHiddenItems = new Set(hiddenItems);
+        if (newHiddenItems.has(item)) {
+            newHiddenItems.delete(item);
+        } else {
+            newHiddenItems.add(item);
+        }
+        setHiddenItems(newHiddenItems);
+
+        const newVisibleItems = wheelItems.filter(
+            (item) => !newHiddenItems.has(item)
+        );
+        setItemsText(newVisibleItems.join("\n"));
+        setVisibleItems(newVisibleItems);
     };
 
     // 處理抽獎
@@ -109,12 +135,12 @@ export const LuckyWheelControls = ({
 
                 // 計算獲勝項目
                 const normalizedRotation = targetRotation % (2 * Math.PI);
-                const segmentAngle = (2 * Math.PI) / wheelItems.length;
+                const segmentAngle = (2 * Math.PI) / visibleItems.length;
                 const winningIndex =
-                    wheelItems.length -
+                    visibleItems.length -
                     1 -
                     Math.floor(normalizedRotation / segmentAngle);
-                const winner = wheelItems[winningIndex % wheelItems.length];
+                const winner = visibleItems[winningIndex % visibleItems.length];
 
                 const timestamp = new Date().toLocaleString();
                 const newResult = { item: winner, time: timestamp };
@@ -127,7 +153,7 @@ export const LuckyWheelControls = ({
     }, [
         isSpinning,
         rotation,
-        wheelItems,
+        visibleItems,
         setResults,
         setRotation,
         setCurrentResult,
@@ -168,22 +194,64 @@ export const LuckyWheelControls = ({
                 <Label htmlFor="wheelItems" className="text-base font-semibold">
                     輪盤項目
                 </Label>
-                <Textarea
-                    id="wheelItems"
-                    value={itemsText}
-                    onChange={handleItemsChange}
-                    placeholder="輸入項目"
-                    rows={5}
-                    className="w-full"
-                />
-                <Button onClick={handleResetToDefaultItems} className="w-full">
-                    重設
-                </Button>
+
+                {isEditingHidden ? (
+                    // 編輯隱藏模式
+                    <div className="space-y-2 border rounded-md p-4">
+                        {wheelItems.map((item, index) => (
+                            <div
+                                key={`${item}-${index}`}
+                                className="flex items-center space-x-2 py-1"
+                            >
+                                <Checkbox
+                                    id={item}
+                                    checked={hiddenItems.has(item)}
+                                    onCheckedChange={() =>
+                                        handleHiddenItemToggle(item)
+                                    }
+                                />
+                                <Label
+                                    htmlFor={item}
+                                    className="flex-grow cursor-pointer"
+                                >
+                                    {item}
+                                </Label>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    // 一般編輯模式
+                    <Textarea
+                        id="wheelItems"
+                        value={itemsText}
+                        onChange={handleItemsTextChange}
+                        placeholder="輸入項目"
+                        rows={10}
+                        className="w-full"
+                    />
+                )}
+
+                <div className="isolate flex -space-x-px">
+                    <Button
+                        variant="outline"
+                        onClick={handleResetToDefaultItems}
+                        className="w-full rounded-r-none focus:z-10"
+                    >
+                        重設
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => setIsEditingHidden(!isEditingHidden)}
+                        className="w-full rounded-l-none focus:z-10"
+                    >
+                        隱藏
+                    </Button>
+                </div>
             </div>
 
             <Button
                 onClick={handleSpin}
-                disabled={isSpinning}
+                disabled={isSpinning || visibleItems.length < 1}
                 className="w-full"
             >
                 {isSpinning ? "抽獎中..." : "開始抽獎"}
