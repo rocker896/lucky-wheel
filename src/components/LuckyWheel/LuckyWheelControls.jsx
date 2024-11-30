@@ -28,7 +28,7 @@ export const LuckyWheelControls = ({
     const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
 
     // 處理圖片上傳
-    const handleImageUpload = (e) => {
+    const handleUploadImage = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -68,7 +68,7 @@ export const LuckyWheelControls = ({
     };
 
     // 處理項目更新
-    const handleItemsTextChange = (e) => {
+    const handleChangeItemsText = (e) => {
         const newItemsText = e.target.value;
         setItemsText(newItemsText);
 
@@ -88,7 +88,7 @@ export const LuckyWheelControls = ({
     };
 
     // 處理項目隱藏狀態切換
-    const handleHiddenItemToggle = (item) => {
+    const handleToggleHiddenItem = (item) => {
         const newHiddenItems = new Set(hiddenItems);
         if (newHiddenItems.has(item)) {
             newHiddenItems.delete(item);
@@ -169,7 +169,7 @@ export const LuckyWheelControls = ({
                     id="wheelImage"
                     type="file"
                     accept="image/*"
-                    onChange={handleImageUpload}
+                    onChange={handleUploadImage}
                     ref={fileInputRef}
                 />
                 <div className="isolate flex -space-x-px">
@@ -207,7 +207,7 @@ export const LuckyWheelControls = ({
                                     id={item}
                                     checked={hiddenItems.has(item)}
                                     onCheckedChange={() =>
-                                        handleHiddenItemToggle(item)
+                                        handleToggleHiddenItem(item)
                                     }
                                 />
                                 <Label
@@ -224,7 +224,7 @@ export const LuckyWheelControls = ({
                     <Textarea
                         id="wheelItems"
                         value={itemsText}
-                        onChange={handleItemsTextChange}
+                        onChange={handleChangeItemsText}
                         placeholder="輸入項目"
                         rows={10}
                         className="w-full"
