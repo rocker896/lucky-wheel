@@ -20,11 +20,11 @@ export const LuckyWheelControls = ({
     setCurrentResult,
 }) => {
     const fileInputRef = useRef(null); // 新增 ref 來操作檔案輸入框
+    const itemsBlockHeight = 218;
     const [itemsText, setItemsText] = useState(wheelItems.join("\n")); // 項目文本
-
-    const [isEditingHidden, setIsEditingHidden] = useState(false); // 編輯隱藏狀態
     const [hiddenItems, setHiddenItems] = useState(new Set()); // 隱藏項目
-
+    const [isEditingWheelItems, setIsEditingWheelItems] = useState(false); // 是否正在編輯輪盤項目
+    const [isEditingHiddenItems, setIsEditingHiddenItems] = useState(false); // 是否正在編輯隱藏項目
     const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
 
     // 處理圖片上傳
@@ -61,30 +61,41 @@ export const LuckyWheelControls = ({
         }
     };
 
-    // 處理底圖重設或清除
-    const handleResetImage = (wheelImagePath) => {
-        setWheelImagePath(wheelImagePath);
+    // 處理底圖清除或重設
+    const handleResetImage = (imagePath) => {
+        setWheelImagePath(imagePath);
         fileInputRef.current.value = ""; // 清除檔案輸入框的值
+    };
+
+    // 處理項目清空或重設
+    const handleResetItems = (items) => {
+        setItemsText(items.join("\n"));
+        setWheelItems(items);
+        setVisibleItems(items);
+        setHiddenItems(new Set());
+        setRotation(0); // 重置旋轉角度
     };
 
     // 處理項目更新
     const handleChangeItemsText = (e) => {
         const newItemsText = e.target.value;
-        setItemsText(newItemsText);
 
-        const newItems = newItemsText
-            .split("\n")
-            .map((item) => item.trim())
-            .filter((item) => item.length > 0);
-        setVisibleItems(newItems);
-        setWheelItems(newItems);
-    };
+        if (newItemsText === "") {
+            handleResetItems([]);
+        } else {
+            setItemsText(newItemsText);
 
-    // 處理項目重設
-    const handleResetToDefaultItems = () => {
-        setItemsText(defaultWheelItems.join("\n"));
-        setWheelItems(defaultWheelItems);
-        setRotation(0); // 重置旋轉角度
+            const newItems = newItemsText
+                .split("\n")
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
+            setWheelItems(newItems);
+
+            const newVisibleItems = newItems.filter(
+                (item) => !hiddenItems.has(item)
+            );
+            setVisibleItems(newVisibleItems);
+        }
     };
 
     // 處理項目隱藏狀態切換
@@ -100,7 +111,6 @@ export const LuckyWheelControls = ({
         const newVisibleItems = wheelItems.filter(
             (item) => !newHiddenItems.has(item)
         );
-        setItemsText(newVisibleItems.join("\n"));
         setVisibleItems(newVisibleItems);
     };
 
@@ -174,18 +184,18 @@ export const LuckyWheelControls = ({
                 />
                 <div className="isolate flex -space-x-px">
                     <Button
-                        onClick={() => handleResetImage(defaultWheelImagePath)}
-                        variant="outline"
                         className="w-full rounded-r-none focus:z-10"
-                    >
-                        重設
-                    </Button>
-                    <Button
-                        onClick={() => handleResetImage(null)}
                         variant="outline"
-                        className="w-full rounded-l-none focus:z-10"
+                        onClick={() => handleResetImage(null)}
                     >
                         清除
+                    </Button>
+                    <Button
+                        className="w-full rounded-l-none focus:z-10"
+                        variant="outline"
+                        onClick={() => handleResetImage(defaultWheelImagePath)}
+                    >
+                        重設
                     </Button>
                 </div>
             </div>
@@ -195,13 +205,19 @@ export const LuckyWheelControls = ({
                     輪盤項目
                 </Label>
 
-                {isEditingHidden ? (
-                    // 編輯隱藏模式
-                    <div className="space-y-2 border rounded-md p-4">
-                        {wheelItems.map((item, index) => (
+                {isEditingHiddenItems ? (
+                    // 編輯隱藏項目模式
+                    <div
+                        className={`min-h-[${itemsBlockHeight}px] max-h-[${itemsBlockHeight}px] space-y-2 border rounded-md p-4`}
+                        style={{
+                            overflowY: "auto",
+                        }}
+                    >
+                        {/* 不重複的輪盤項目 */}
+                        {[...new Set(wheelItems)].map((item) => (
                             <div
-                                key={`${item}-${index}`}
-                                className="flex items-center space-x-2 py-1"
+                                key={item}
+                                className="flex items-center space-x-2"
                             >
                                 <Checkbox
                                     id={item}
@@ -220,39 +236,75 @@ export const LuckyWheelControls = ({
                         ))}
                     </div>
                 ) : (
-                    // 一般編輯模式
-                    <Textarea
-                        id="wheelItems"
-                        value={itemsText}
-                        onChange={handleChangeItemsText}
-                        placeholder="輸入項目"
-                        rows={10}
-                        className="w-full"
-                    />
+                    <div className="space-y-2">
+                        {isEditingWheelItems ? (
+                            // 編輯輪盤項目模式
+                            <Textarea
+                                id="wheelItems"
+                                value={itemsText}
+                                onChange={handleChangeItemsText}
+                                placeholder="輸入項目"
+                                rows={10}
+                                className="w-full"
+                                autoFocus
+                                onBlur={() => setIsEditingWheelItems(false)}
+                            />
+                        ) : (
+                            <div
+                                className={`min-h-[${itemsBlockHeight}px] max-h-[${itemsBlockHeight}px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background`}
+                                style={{
+                                    cursor: "pointer",
+                                    overflowY: "auto",
+                                }}
+                                onClick={() => setIsEditingWheelItems(true)}
+                            >
+                                {wheelItems.map((item, index) => (
+                                    <div
+                                        key={`${item}-${index}`}
+                                        className={
+                                            hiddenItems.has(item)
+                                                ? "line-through text-muted-foreground bg-gray-300"
+                                                : ""
+                                        }
+                                    >
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 )}
-
                 <div className="isolate flex -space-x-px">
                     <Button
-                        variant="outline"
-                        onClick={handleResetToDefaultItems}
                         className="w-full rounded-r-none focus:z-10"
+                        variant="outline"
+                        onClick={() => handleResetItems([])}
                     >
-                        重設
+                        清空
                     </Button>
                     <Button
-                        variant="outline"
-                        onClick={() => setIsEditingHidden(!isEditingHidden)}
-                        className="w-full rounded-l-none focus:z-10"
+                        className="w-full rounded-l-none rounded-r-none focus:z-10"
+                        variant={isEditingHiddenItems ? "" : "outline"}
+                        onClick={() =>
+                            setIsEditingHiddenItems(!isEditingHiddenItems)
+                        }
                     >
-                        隱藏
+                        {isEditingHiddenItems ? "完成" : "隱藏"}
+                    </Button>
+                    <Button
+                        className="w-full rounded-l-none focus:z-10"
+                        variant="outline"
+                        onClick={() => handleResetItems(defaultWheelItems)}
+                    >
+                        重設
                     </Button>
                 </div>
             </div>
 
             <Button
-                onClick={handleSpin}
-                disabled={isSpinning || visibleItems.length < 1}
                 className="w-full"
+                disabled={isSpinning || visibleItems.length < 1}
+                onClick={handleSpin}
             >
                 {isSpinning ? "抽獎中..." : "開始抽獎"}
             </Button>
