@@ -6,8 +6,10 @@ import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const LuckyWheelResults = ({ spinningResults }) => {
-    const [notification, setNotification] = useState(null); // 通知訊息
-    const notificationTimeoutRef = useRef(null); // 通知計時器引用
+    // ↓ 通知訊息
+    const [notification, setNotification] = useState(null);
+    // ↓ 通知計時器引用
+    const notificationTimeoutRef = useRef(null);
 
     // 清除通知計時器
     useEffect(() => {

@@ -10,10 +10,14 @@ export const LuckyWheelItems = ({
     setWheelItems,
     setVisibleItems,
 }) => {
-    const [itemsText, setItemsText] = useState(wheelItems.join("\n")); // 項目文本
-    const [hiddenItems, setHiddenItems] = useState(new Set()); // 隱藏項目
-    const [isEditingWheelItems, setIsEditingWheelItems] = useState(false); // 是否正在編輯輪盤項目
-    const [isEditingHiddenItems, setIsEditingHiddenItems] = useState(false); // 是否正在編輯隱藏項目
+    // ↓ 項目文本
+    const [itemsText, setItemsText] = useState(wheelItems.join("\n"));
+    // ↓ 隱藏項目
+    const [hiddenItems, setHiddenItems] = useState(new Set());
+    // ↓ 是否正在編輯輪盤項目
+    const [isEditingWheelItems, setIsEditingWheelItems] = useState(false);
+    // ↓ 是否正在編輯隱藏項目
+    const [isEditingHiddenItems, setIsEditingHiddenItems] = useState(false);
 
     // 處理項目清空或重設
     const handleResetItems = (items) => {

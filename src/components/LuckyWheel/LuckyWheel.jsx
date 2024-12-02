@@ -11,16 +11,24 @@ import { useState } from "react";
 
 export const LuckyWheel = () => {
     const envWheelItems = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_ITEMS;
+    // ↓ 預設輪盤項目
     const defaultWheelItems = envWheelItems
         ? envWheelItems.split(",")
-        : ["1", "2", "3", "4", "5", "6"]; // 預設輪盤項目
+        : ["1", "2", "3", "4", "5", "6"];
+    // ↓ 輪盤項目
     const [wheelItems, setWheelItems] = useState(defaultWheelItems);
-    const [visibleItems, setVisibleItems] = useState(wheelItems); // 實際顯示項目
-    const [spinningRotation, setSpinningRotation] = useState(0); // 旋轉角度
-    const [spinningResults, setSpinningResults] = useState([]); // 抽獎結果
-    const [currentResult, setCurrentResult] = useState(null); // 當前結果
-    const wheelRadius = 275; // 輪盤半徑
-    const wheelDiameter = wheelRadius * 2; // 輪盤直徑
+    // ↓ 可見項目
+    const [visibleItems, setVisibleItems] = useState(wheelItems);
+    // ↓ 旋轉角度
+    const [spinningRotation, setSpinningRotation] = useState(0);
+    // ↓ 抽獎結果
+    const [spinningResults, setSpinningResults] = useState([]);
+    // ↓ 當前結果
+    const [currentResult, setCurrentResult] = useState(null);
+    // ↓ 輪盤半徑
+    const wheelRadius = 275;
+    // ↓ 輪盤直徑
+    const wheelDiameter = wheelRadius * 2;
 
     return (
         <div className="flex justify-center min-h-screen p-4">

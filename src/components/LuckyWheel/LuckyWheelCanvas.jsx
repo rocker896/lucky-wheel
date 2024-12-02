@@ -10,10 +10,14 @@ export const LuckyWheelCanvas = ({
     spinningRotation,
 }) => {
     const envWheelImagePath = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH;
-    const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : ""; // 預設輪盤底圖路徑
+    // ↓ 預設輪盤底圖路徑
+    const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : "";
+    // ↓ 輪盤底圖路徑
     const [wheelImagePath, setWheelImagePath] = useState(defaultWheelImagePath);
-    const canvasRef = useRef(null); // Canvas 引用
-    const fileInputRef = useRef(null); // 檔案輸入框引用
+    // ↓ Canvas 引用
+    const canvasRef = useRef(null);
+    // ↓ 檔案輸入框引用
+    const fileInputRef = useRef(null);
 
     // 繪製輪盤
     useEffect(() => {

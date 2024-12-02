@@ -10,7 +10,8 @@ export const LuckyWheelPrizes = ({
     setSpinningResults,
     setCurrentResult,
 }) => {
-    const [isSpinning, setIsSpinning] = useState(false); // 是否正在旋轉
+    // ↓ 是否正在旋轉
+    const [isSpinning, setIsSpinning] = useState(false);
 
     // 處理抽獎
     const handleSpin = useCallback(() => {
