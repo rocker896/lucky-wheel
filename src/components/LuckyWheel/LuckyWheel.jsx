@@ -23,35 +23,44 @@ export const LuckyWheel = () => {
     const wheelDiameter = wheelRadius * 2; // 輪盤直徑
 
     return (
-        <div className="flex flex-col space-y-4 p-4">
-            <Card className="w-full max-w-2xl mx-auto">
+        <div className="flex justify-center min-h-screen p-4">
+            <Card className="w-full max-w-7xl">
                 <CardHeader className="flex-row justify-between items-center py-3">
                     <CardTitle className="text-lg">幸運輪盤</CardTitle>
                     <ThemeToggleButton />
                 </CardHeader>
 
-                <CardContent className="space-y-4">
-                    <ResultAlert currentResult={currentResult} />
-                    <Canvas
-                        wheelItems={visibleItems}
-                        wheelRadius={wheelRadius}
-                        wheelDiameter={wheelDiameter}
-                        spinningRotation={spinningRotation}
-                    />
-                    <Items
-                        wheelItems={wheelItems}
-                        defaultWheelItems={defaultWheelItems}
-                        setWheelItems={setWheelItems}
-                        setVisibleItems={setVisibleItems}
-                    />
-                    <Prizes
-                        visibleItems={visibleItems}
-                        spinningRotation={spinningRotation}
-                        setSpinningRotation={setSpinningRotation}
-                        setSpinningResults={setSpinningResults}
-                        setCurrentResult={setCurrentResult}
-                    />
-                    <Results spinningResults={spinningResults} />
+                <CardContent>
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        {/* 左側區域 */}
+                        <div className="flex-1 space-y-4">
+                            <ResultAlert currentResult={currentResult} />
+                            <Canvas
+                                wheelItems={visibleItems}
+                                wheelRadius={wheelRadius}
+                                wheelDiameter={wheelDiameter}
+                                spinningRotation={spinningRotation}
+                            />
+                        </div>
+
+                        {/* 右側區域 */}
+                        <div className="flex-1 space-y-4">
+                            <Items
+                                wheelItems={wheelItems}
+                                defaultWheelItems={defaultWheelItems}
+                                setWheelItems={setWheelItems}
+                                setVisibleItems={setVisibleItems}
+                            />
+                            <Prizes
+                                visibleItems={visibleItems}
+                                spinningRotation={spinningRotation}
+                                setSpinningRotation={setSpinningRotation}
+                                setSpinningResults={setSpinningResults}
+                                setCurrentResult={setCurrentResult}
+                            />
+                            <Results spinningResults={spinningResults} />
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
         </div>
