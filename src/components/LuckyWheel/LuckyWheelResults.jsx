@@ -4,9 +4,9 @@ import { Label } from "@/components/ui/label";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-export const LuckyWheelResults = ({ results }) => {
-    const notificationTimeoutRef = useRef(null); // 通知計時器引用
+export const LuckyWheelResults = ({ spinningResults }) => {
     const [notification, setNotification] = useState(null); // 通知訊息
+    const notificationTimeoutRef = useRef(null); // 通知計時器引用
 
     // 清除通知計時器
     useEffect(() => {
@@ -38,7 +38,7 @@ export const LuckyWheelResults = ({ results }) => {
 
     // 複製所有結果
     const handleCopyAllResults = () => {
-        const textToCopy = results
+        const textToCopy = spinningResults
             .map((result) => `${result.time}: ${result.item}`)
             .join("\n");
         navigator.clipboard.writeText(textToCopy).then(() => {
@@ -59,7 +59,7 @@ export const LuckyWheelResults = ({ results }) => {
 
             <div className="flex justify-between items-center mb-2">
                 <Label className="text-base font-semibold">抽獎記錄</Label>
-                {results.length > 0 && (
+                {spinningResults.length > 0 && (
                     <Button
                         variant="outline"
                         size="sm"
@@ -72,7 +72,7 @@ export const LuckyWheelResults = ({ results }) => {
                 )}
             </div>
             <div className="max-h-40 overflow-y-auto">
-                {results.map((result, index) => (
+                {spinningResults.map((result, index) => (
                     <div
                         key={index}
                         className="flex justify-between items-center text-sm py-1 border-b"

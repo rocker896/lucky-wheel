@@ -1,9 +1,10 @@
 "use client";
 
-import { LuckyWheelCanvas } from "@/components/LuckyWheel/LuckyWheelCanvas";
-import { LuckyWheelControls } from "@/components/LuckyWheel/LuckyWheelControls";
-import { LuckyWheelResultAlert } from "@/components/LuckyWheel/LuckyWheelResultAlert";
-import { LuckyWheelResults } from "@/components/LuckyWheel/LuckyWheelResults";
+import { LuckyWheelCanvas as Canvas } from "@/components/LuckyWheel/LuckyWheelCanvas";
+import { LuckyWheelItems as Items } from "@/components/LuckyWheel/LuckyWheelItems";
+import { LuckyWheelPrizes as Prizes } from "@/components/LuckyWheel/LuckyWheelPrizes";
+import { LuckyWheelResultAlert as ResultAlert } from "@/components/LuckyWheel/LuckyWheelResultAlert";
+import { LuckyWheelResults as Results } from "@/components/LuckyWheel/LuckyWheelResults";
 import { ThemeToggleButton } from "@/components/Theme/ThemeToggleButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
@@ -14,58 +15,43 @@ export const LuckyWheel = () => {
         ? envWheelItems.split(",")
         : ["1", "2", "3", "4", "5", "6"]; // 預設輪盤項目
     const [wheelItems, setWheelItems] = useState(defaultWheelItems);
-
-    const envWheelImagePath = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH;
-    const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : ""; // 預設輪盤底圖路徑
-    const [wheelImagePath, setWheelImagePath] = useState(defaultWheelImagePath);
-
-    const [visibleItems, setVisibleItems] = useState(
-        wheelItems.filter((item) => !new Set().has(item))
-    ); // 實際顯示項目
-
+    const [visibleItems, setVisibleItems] = useState(wheelItems); // 實際顯示項目
+    const [spinningRotation, setSpinningRotation] = useState(0); // 旋轉角度
+    const [spinningResults, setSpinningResults] = useState([]); // 抽獎結果
+    const [currentResult, setCurrentResult] = useState(null); // 當前結果
     const wheelRadius = 275; // 輪盤半徑
     const wheelDiameter = wheelRadius * 2; // 輪盤直徑
-    const [rotation, setRotation] = useState(0); // 當前旋轉角度
-
-    const [results, setResults] = useState([]); // 抽獎結果
-    const [currentResult, setCurrentResult] = useState(null); // 當前結果
 
     return (
         <div className="flex flex-col space-y-4 p-4">
             <Card className="w-full max-w-2xl mx-auto">
                 <CardHeader className="flex-row justify-between items-center py-3">
                     <CardTitle className="text-lg">幸運輪盤</CardTitle>
-
                     <ThemeToggleButton />
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                    <LuckyWheelResultAlert currentResult={currentResult} />
-
-                    <LuckyWheelCanvas
-                        rotation={rotation}
+                    <ResultAlert currentResult={currentResult} />
+                    <Canvas
                         wheelItems={visibleItems}
-                        wheelImagePath={wheelImagePath}
                         wheelRadius={wheelRadius}
                         wheelDiameter={wheelDiameter}
+                        spinningRotation={spinningRotation}
                     />
-
-                    <LuckyWheelControls
-                        rotation={rotation}
+                    <Items
                         wheelItems={wheelItems}
-                        visibleItems={visibleItems}
-                        wheelDiameter={wheelDiameter}
                         defaultWheelItems={defaultWheelItems}
-                        defaultWheelImagePath={defaultWheelImagePath}
-                        setResults={setResults}
-                        setRotation={setRotation}
                         setWheelItems={setWheelItems}
-                        setWheelImagePath={setWheelImagePath}
                         setVisibleItems={setVisibleItems}
+                    />
+                    <Prizes
+                        visibleItems={visibleItems}
+                        spinningRotation={spinningRotation}
+                        setSpinningRotation={setSpinningRotation}
+                        setSpinningResults={setSpinningResults}
                         setCurrentResult={setCurrentResult}
                     />
-
-                    <LuckyWheelResults results={results} />
+                    <Results spinningResults={spinningResults} />
                 </CardContent>
             </Card>
         </div>
