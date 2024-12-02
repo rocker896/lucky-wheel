@@ -186,7 +186,6 @@ export const LuckyWheelCanvas = ({
                 <Label htmlFor="wheelImage" className="text-base font-semibold">
                     底圖
                 </Label>
-
                 <Input
                     id="wheelImage"
                     type="file"

@@ -62,107 +62,102 @@ export const LuckyWheelItems = ({
     };
 
     return (
-        <>
-            <div className="space-y-2">
-                <Label htmlFor="wheelItems" className="text-base font-semibold">
-                    項目
-                </Label>
+        <div className="space-y-2">
+            <Label htmlFor="wheelItems" className="text-base font-semibold">
+                項目
+            </Label>
 
-                {isEditingHiddenItems ? (
-                    // 編輯隱藏項目模式
-                    <div
-                        className={`min-h-[218px] max-h-[218px] space-y-2 border rounded-md p-4`}
-                        style={{
-                            overflowY: "auto",
-                        }}
-                    >
-                        {/* 不重複的輪盤項目 */}
-                        {[...new Set(wheelItems)].map((item) => (
-                            <div
-                                key={item}
-                                className="flex items-center space-x-2"
+            {isEditingHiddenItems ? (
+                // 編輯隱藏項目模式
+                <div
+                    className={`min-h-[218px] max-h-[218px] space-y-2 border rounded-md p-4`}
+                    style={{
+                        overflowY: "auto",
+                    }}
+                >
+                    {/* 不重複的輪盤項目 */}
+                    {[...new Set(wheelItems)].map((item) => (
+                        <div key={item} className="flex items-center space-x-2">
+                            <Checkbox
+                                id={item}
+                                checked={hiddenItems.has(item)}
+                                onCheckedChange={() =>
+                                    handleToggleHiddenItem(item)
+                                }
+                            />
+                            <Label
+                                htmlFor={item}
+                                className="flex-grow cursor-pointer"
                             >
-                                <Checkbox
-                                    id={item}
-                                    checked={hiddenItems.has(item)}
-                                    onCheckedChange={() =>
-                                        handleToggleHiddenItem(item)
+                                {item}
+                            </Label>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="space-y-2">
+                    {isEditingWheelItems ? (
+                        // 編輯輪盤項目模式
+                        <Textarea
+                            id="wheelItems"
+                            value={itemsText}
+                            onChange={handleChangeItemsText}
+                            placeholder="輸入項目"
+                            rows={10}
+                            className="w-full"
+                            autoFocus
+                            onBlur={() => setIsEditingWheelItems(false)}
+                        />
+                    ) : (
+                        <div
+                            className={`min-h-[218px] max-h-[218px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background`}
+                            style={{
+                                cursor: "pointer",
+                                overflowY: "auto",
+                            }}
+                            onClick={() => setIsEditingWheelItems(true)}
+                        >
+                            {wheelItems.map((item, index) => (
+                                <div
+                                    key={`${item}-${index}`}
+                                    className={
+                                        hiddenItems.has(item)
+                                            ? "line-through text-muted-foreground bg-gray-300"
+                                            : ""
                                     }
-                                />
-                                <Label
-                                    htmlFor={item}
-                                    className="flex-grow cursor-pointer"
                                 >
                                     {item}
-                                </Label>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="space-y-2">
-                        {isEditingWheelItems ? (
-                            // 編輯輪盤項目模式
-                            <Textarea
-                                id="wheelItems"
-                                value={itemsText}
-                                onChange={handleChangeItemsText}
-                                placeholder="輸入項目"
-                                rows={10}
-                                className="w-full"
-                                autoFocus
-                                onBlur={() => setIsEditingWheelItems(false)}
-                            />
-                        ) : (
-                            <div
-                                className={`min-h-[218px] max-h-[218px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background`}
-                                style={{
-                                    cursor: "pointer",
-                                    overflowY: "auto",
-                                }}
-                                onClick={() => setIsEditingWheelItems(true)}
-                            >
-                                {wheelItems.map((item, index) => (
-                                    <div
-                                        key={`${item}-${index}`}
-                                        className={
-                                            hiddenItems.has(item)
-                                                ? "line-through text-muted-foreground bg-gray-300"
-                                                : ""
-                                        }
-                                    >
-                                        {item}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-                <div className="isolate flex -space-x-px">
-                    <Button
-                        className="w-full rounded-r-none focus:z-10"
-                        variant="outline"
-                        onClick={() => handleResetItems([])}
-                    >
-                        清空
-                    </Button>
-                    <Button
-                        className="w-full rounded-l-none rounded-r-none focus:z-10"
-                        variant={isEditingHiddenItems ? "" : "outline"}
-                        onClick={() =>
-                            setIsEditingHiddenItems(!isEditingHiddenItems)
-                        }
-                    >
-                        {isEditingHiddenItems ? "完成" : "隱藏"}
-                    </Button>
-                    <Button
-                        className="w-full rounded-l-none focus:z-10"
-                        variant="outline"
-                        onClick={() => handleResetItems(defaultWheelItems)}
-                    >
-                        重設
-                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+            )}
+            <div className="isolate flex -space-x-px">
+                <Button
+                    className="w-full rounded-r-none focus:z-10"
+                    variant="outline"
+                    onClick={() => handleResetItems([])}
+                >
+                    清空
+                </Button>
+                <Button
+                    className="w-full rounded-l-none rounded-r-none focus:z-10"
+                    variant={isEditingHiddenItems ? "" : "outline"}
+                    onClick={() =>
+                        setIsEditingHiddenItems(!isEditingHiddenItems)
+                    }
+                >
+                    {isEditingHiddenItems ? "完成" : "隱藏"}
+                </Button>
+                <Button
+                    className="w-full rounded-l-none focus:z-10"
+                    variant="outline"
+                    onClick={() => handleResetItems(defaultWheelItems)}
+                >
+                    重設
+                </Button>
             </div>
-        </>
+        </div>
     );
 };

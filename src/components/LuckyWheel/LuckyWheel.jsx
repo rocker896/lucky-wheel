@@ -25,11 +25,10 @@ export const LuckyWheel = () => {
     return (
         <div className="flex justify-center min-h-screen p-4">
             <Card className="w-full max-w-7xl">
-                <CardHeader className="flex-row justify-between items-center py-3">
+                <CardHeader className="flex-row justify-between items-center py-3 border-b">
                     <CardTitle className="text-lg">幸運輪盤</CardTitle>
                     <ThemeToggleButton />
                 </CardHeader>
-
                 <CardContent>
                     <div className="flex flex-col lg:flex-row gap-8">
                         {/* 左側區域 */}

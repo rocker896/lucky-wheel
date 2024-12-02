@@ -1,6 +1,7 @@
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -47,7 +48,7 @@ export const LuckyWheelResults = ({ spinningResults }) => {
     };
 
     return (
-        <div className="mt-4">
+        <div className="space-y-2">
             {notification && (
                 <Alert className="fixed top-4 right-4 z-50 bg-green-100 border-green-400 w-auto">
                     <AlertTitle className="text-green-800 flex items-center gap-2">
@@ -56,7 +57,7 @@ export const LuckyWheelResults = ({ spinningResults }) => {
                     </AlertTitle>
                 </Alert>
             )}
-
+            <Separator className="my-3" />
             <div className="flex justify-between items-center mb-2">
                 <Label className="text-base font-semibold">抽獎記錄</Label>
                 {spinningResults.length > 0 && (

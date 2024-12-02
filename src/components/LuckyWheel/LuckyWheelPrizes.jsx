@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { useCallback, useState } from "react";
 
 export const LuckyWheelPrizes = ({
@@ -67,20 +68,16 @@ export const LuckyWheelPrizes = ({
     ]);
 
     return (
-        <>
-            <div className="space-y-2">
-                <Label htmlFor="wheelItems" className="text-base font-semibold">
-                    獎項
-                </Label>
-
-                <Button
-                    className="w-full"
-                    disabled={isSpinning || visibleItems.length < 1}
-                    onClick={handleSpin}
-                >
-                    {isSpinning ? "抽獎中..." : "開始抽獎"}
-                </Button>
-            </div>
-        </>
+        <div className="space-y-2">
+            <Separator className="my-3" />
+            <Label className="text-base font-semibold">獎項</Label>
+            <Button
+                className="w-full"
+                disabled={isSpinning || visibleItems.length < 1}
+                onClick={handleSpin}
+            >
+                {isSpinning ? "抽獎中..." : "開始抽獎"}
+            </Button>
+        </div>
     );
 };
