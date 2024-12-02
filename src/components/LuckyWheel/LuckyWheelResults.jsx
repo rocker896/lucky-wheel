@@ -61,7 +61,7 @@ export const LuckyWheelResults = ({ spinningResults }) => {
             )}
             <Separator className="my-3" />
             <div className="flex justify-between items-center mb-2">
-                <Label className="text-base font-semibold">抽獎記錄</Label>
+                <Label>抽獎記錄</Label>
                 {spinningResults.length > 0 && (
                     <Button
                         variant="outline"

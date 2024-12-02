@@ -67,10 +67,7 @@ export const LuckyWheelItems = ({
 
     return (
         <div className="space-y-2">
-            <Label htmlFor="wheelItems" className="text-base font-semibold">
-                項目
-            </Label>
-
+            <Label htmlFor="wheelItems">項目</Label>
             {isEditingHiddenItems ? (
                 // 編輯隱藏項目模式
                 <div

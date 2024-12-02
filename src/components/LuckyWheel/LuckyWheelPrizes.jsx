@@ -71,7 +71,7 @@ export const LuckyWheelPrizes = ({
     return (
         <div className="space-y-2">
             <Separator className="my-3" />
-            <Label className="text-base font-semibold">獎項</Label>
+            <Label>獎項</Label>
             <Button
                 className="w-full"
                 disabled={isSpinning || visibleItems.length < 1}
