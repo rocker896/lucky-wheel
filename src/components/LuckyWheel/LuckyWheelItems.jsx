@@ -71,7 +71,7 @@ export const LuckyWheelItems = ({
             {isEditingHiddenItems ? (
                 // 編輯隱藏項目模式
                 <div
-                    className={`min-h-[218px] max-h-[218px] space-y-2 border rounded-md p-4`}
+                    className="min-h-[218px] max-h-[218px] border rounded-md px-3 py-2"
                     style={{
                         overflowY: "auto",
                     }}
@@ -86,12 +86,12 @@ export const LuckyWheelItems = ({
                                     handleToggleHiddenItem(item)
                                 }
                             />
-                            <Label
+                            <label
                                 htmlFor={item}
-                                className="flex-grow cursor-pointer"
+                                className="flex-grow cursor-pointer text-sm"
                             >
                                 {item}
-                            </Label>
+                            </label>
                         </div>
                     ))}
                 </div>
@@ -111,7 +111,7 @@ export const LuckyWheelItems = ({
                         />
                     ) : (
                         <div
-                            className={`min-h-[218px] max-h-[218px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background`}
+                            className="min-h-[218px] max-h-[218px] border rounded-md px-3 py-2 text-sm"
                             style={{
                                 cursor: "pointer",
                                 overflowY: "auto",
