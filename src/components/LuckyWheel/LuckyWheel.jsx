@@ -7,6 +7,7 @@ import { LuckyWheelResultAlert as ResultAlert } from "@/components/LuckyWheel/Lu
 import { LuckyWheelResults as Results } from "@/components/LuckyWheel/LuckyWheelResults";
 import { ThemeToggleButton } from "@/components/Theme/ThemeToggleButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 import { useState } from "react";
 
 export const LuckyWheel = () => {
@@ -34,7 +35,9 @@ export const LuckyWheel = () => {
         <div className="flex justify-center min-h-screen p-4">
             <Card className="w-full max-w-7xl">
                 <CardHeader className="flex-row justify-between items-center py-3 border-b">
-                    <CardTitle className="text-lg">幸運輪盤</CardTitle>
+                    <CardTitle className="text-lg">
+                        <Link href="/">幸運輪盤</Link>
+                    </CardTitle>
                     <ThemeToggleButton />
                 </CardHeader>
                 <CardContent>
