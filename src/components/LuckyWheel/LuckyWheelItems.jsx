@@ -99,7 +99,7 @@ export const LuckyWheelItems = ({
                     ))}
                 </div>
             ) : (
-                <div className="space-y-2">
+                <>
                     {isEditingWheelItems ? (
                         // 編輯輪盤項目模式
                         <Textarea
@@ -135,7 +135,7 @@ export const LuckyWheelItems = ({
                             ))}
                         </div>
                     )}
-                </div>
+                </>
             )}
             <div className="isolate flex -space-x-px">
                 <Button
