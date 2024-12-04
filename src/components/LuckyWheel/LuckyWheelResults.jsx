@@ -81,7 +81,7 @@ export const LuckyWheelResults = ({ spinningResults }) => {
                         className="flex justify-between items-center text-sm py-1 border-b"
                     >
                         <span>
-                            {result.time}: {result.item}
+                            {result.time}: {result.prize} - {result.item}
                         </span>
                         <Button
                             variant="ghost"

@@ -1,17 +1,27 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { useCallback, useState } from "react";
 
 export const LuckyWheelPrizes = ({
     visibleItems,
     spinningRotation,
     setSpinningRotation,
-    setSpinningResults,
     setCurrentResult,
+    setSpinningResults,
 }) => {
     // ↓ 是否正在旋轉
     const [isSpinning, setIsSpinning] = useState(false);
+    // ↓ 環境變數: 獎項
+    const envPrizes = process.env.NEXT_PUBLIC_DEFAULT_PRIZES;
+    // ↓ 預設獎項
+    const defaultPrizes = envPrizes ? envPrizes.split(",") : [];
+    // ↓ 獎項
+    const [prizes, setPrizes] = useState(defaultPrizes);
+    // ↓ 當前獎項
+    const [currentPrize, setCurrentPrize] = useState(prizes[0]);
 
     // 處理抽獎
     const handleSpin = useCallback(() => {
@@ -52,26 +62,55 @@ export const LuckyWheelPrizes = ({
                 const winner = visibleItems[winningIndex % visibleItems.length];
 
                 const timestamp = new Date().toLocaleString();
-                const newResult = { item: winner, time: timestamp };
-                setSpinningResults((prev) => [...prev, newResult]);
+                const newResult = {
+                    item: winner,
+                    time: timestamp,
+                    prize: currentPrize,
+                };
                 setCurrentResult(newResult);
+                setSpinningResults((prev) => [...prev, newResult]);
             }
         };
 
         requestAnimationFrame(animate);
     }, [
+        isSpinning,
+        currentPrize,
         visibleItems,
         spinningRotation,
         setSpinningRotation,
-        setSpinningResults,
         setCurrentResult,
-        isSpinning,
+        setSpinningResults,
     ]);
 
     return (
         <div className="space-y-2">
             <Separator className="my-3" />
             <Label>獎項</Label>
+            <div className="isolate flex flex-wrap gap-2">
+                {prizes.map((item) => (
+                    <Button
+                        key={item}
+                        variant={item === currentPrize ? "" : "outline"}
+                        onClick={() => setCurrentPrize(item)}
+                    >
+                        {item}
+                    </Button>
+                ))}
+                <div className="relative w-auto">
+                    <Input
+                        value={currentPrize}
+                        placeholder="自訂獎項"
+                        onChange={(e) => setCurrentPrize(e.target.value)}
+                    />
+                    <div
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() => setCurrentPrize("")}
+                    >
+                        <Cross2Icon />
+                    </div>
+                </div>
+            </div>
             <Button
                 className="w-full"
                 disabled={isSpinning || visibleItems.length < 1}
