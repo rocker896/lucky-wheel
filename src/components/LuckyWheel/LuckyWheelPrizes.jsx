@@ -15,7 +15,7 @@ export const LuckyWheelPrizes = ({
     // ↓ 是否正在旋轉
     const [isSpinning, setIsSpinning] = useState(false);
     // ↓ 環境變數: 獎項
-    const envPrizes = process.env.NEXT_PUBLIC_DEFAULT_PRIZES;
+    const envPrizes = process.env.NEXT_PUBLIC_PRIZES;
     // ↓ 預設獎項
     const defaultPrizes = envPrizes ? envPrizes.split(",") : [];
     // ↓ 獎項

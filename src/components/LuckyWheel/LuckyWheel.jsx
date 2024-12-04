@@ -11,7 +11,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 export const LuckyWheel = () => {
-    const envWheelItems = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_ITEMS;
+    // ↓ 環境變數: 輪盤項目
+    const envWheelItems = process.env.NEXT_PUBLIC_WHEEL_ITEMS;
     // ↓ 預設輪盤項目
     const defaultWheelItems = envWheelItems
         ? envWheelItems.split(",")

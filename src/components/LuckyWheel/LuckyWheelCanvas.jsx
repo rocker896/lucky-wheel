@@ -9,7 +9,8 @@ export const LuckyWheelCanvas = ({
     wheelDiameter,
     spinningRotation,
 }) => {
-    const envWheelImagePath = process.env.NEXT_PUBLIC_DEFAULT_WHEEL_IMAGE_PATH;
+    // ↓ 環境變數: 輪盤底圖路徑
+    const envWheelImagePath = process.env.NEXT_PUBLIC_WHEEL_IMAGE_PATH;
     // ↓ 預設輪盤底圖路徑
     const defaultWheelImagePath = envWheelImagePath ? envWheelImagePath : "";
     // ↓ 輪盤底圖路徑
